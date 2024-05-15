@@ -10,6 +10,8 @@ using System.IO.Compression;
 public partial class BuildAllVersions
 {
 
+    public static string product_name { get { return PlayerSettings.productName; } }
+
     public static string project_path
     {
         get
@@ -30,10 +32,15 @@ public partial class BuildAllVersions
     [MenuItem("Building/Build All Versions")]
 
    
-    public static Dictionary<string,string> BuildAll()
+    public static BuildOutput BuildAll()
     {
         // Define your build settings for each version here
         List<BuildSettings> allBuilds = new List<BuildSettings>();
+
+
+        BuildOutput _output = new BuildOutput();
+
+
 
 
         //try { allBuilds.Add(new BuildSettings("Android", BuildTarget.Android, BuildOptions.None)); }
@@ -42,53 +49,39 @@ public partial class BuildAllVersions
         //try { allBuilds.Add(new BuildSettings("iOS", BuildTarget.iOS, BuildOptions.None)); }
         //catch { }
 
-        try { allBuilds.Add(new BuildSettings("MacOS", BuildTarget.StandaloneOSX, BuildOptions.None)); }
-        catch { }
+        //try { allBuilds.Add(new BuildSettings("macOS", BuildTarget.StandaloneOSX, BuildOptions.None)); }
+        //catch { }
 
-        try { allBuilds.Add(new BuildSettings("win32", BuildTarget.StandaloneWindows, BuildOptions.None)); }
-        catch { }
+        //try { allBuilds.Add(new BuildSettings("win32", BuildTarget.StandaloneWindows, BuildOptions.None)); }
+        //catch { }
 
         //try { allBuilds.Add(new BuildSettings("win64", BuildTarget.StandaloneWindows64, BuildOptions.None)); }
         //catch { }
 
-        try { allBuilds.Add(new BuildSettings("Linux", BuildTarget.StandaloneLinux64, BuildOptions.None)); }
-        catch { }
-
-        //try { allBuilds.Add(new BuildSettings("WebGL", BuildTarget.WebGL, BuildOptions.None)); }
+        //try { allBuilds.Add(new BuildSettings("linux", BuildTarget.StandaloneLinux64, BuildOptions.None)); }
         //catch { }
 
-
-        Dictionary<string,string> _return_value = new Dictionary<string, string>();
-
+        
 
 
-
+        Dictionary<string,string> _standalone_dict = new Dictionary<string, string>();
 
 
 
-
-        string _product_name = PlayerSettings.productName;
+        //create builds into path_to_your_project/Builds (up one level from /Assets)
 
         foreach (BuildSettings build in allBuilds)
         {
-            string outputPath = "Builds/" + _product_name  + "_"+ build.buildName+"/";
-            string _zip_file_path = "Builds/" + _product_name + "-" + build.buildName + ".zip";
-            _return_value.Add(build.buildName,Path.Combine(project_path,_zip_file_path));
+            string _pipeline_output_path = "Builds/" + product_name  + "_"+ build.buildName+"/";
+            string _zip_file_path = "Builds/" + product_name + "-" + build.buildName + ".zip";
+            _standalone_dict.Add(build.buildName,Path.Combine(project_path,_zip_file_path));
 
             try
             {
-                string _build_folder = outputPath + _product_name + "_" + build.buildName;
+                string _build_folder = _pipeline_output_path + product_name + "_" + build.buildName;
 
                 BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, _build_folder, build.buildTarget, build.buildOptions);
-                ZipFile.CreateFromDirectory(outputPath, _zip_file_path);
-
-
-
-                
-
-
-
-
+                ZipFile.CreateFromDirectory(_pipeline_output_path, _zip_file_path);
 
             }
             catch
@@ -102,23 +95,44 @@ public partial class BuildAllVersions
             
         }
 
+        _output.standalone_locations = _standalone_dict;
 
-        return _return_value;
+        _output.webgl_path = buildForBrowser();
+
+
+        return _output;
 
 
     }
 
 
+    static string buildForBrowser()
+    {
+        string _pipeline_output_path = "Builds/" + product_name + "-browser";
+        string _zip_file_path = "Builds/"+ product_name + "-browser.zip";
+
+        BuildPipeline.BuildPlayer(EditorBuildSettings.scenes,_pipeline_output_path, BuildTarget.WebGL, BuildOptions.None);
+
+        if (File.Exists(_zip_file_path))
+            File.Delete(_zip_file_path);
+        ZipFile.CreateFromDirectory(_pipeline_output_path, _zip_file_path);
+
+
+        return _zip_file_path;
+    }
+
+
+    public struct BuildOutput
+    {
+
+        public Dictionary<string, string> standalone_locations;
+
+        public string webgl_path;
+
+
+    }
+
     
-
-
-
-
-
-
-
-
-
     private class BuildSettings
     {
         public string buildName;

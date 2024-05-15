@@ -8,46 +8,45 @@ using System.Diagnostics;
 public partial class BuildAllVersions
 {
 
+    //https://monkeywearingafezwithamop.itch.io/bulter-tests
 
-    public static string itch_username = "monkeywearingafezwithamop";//read in from a seperate file???
-    public static string itch_project = "bulter-tests";//read in from a seperate file???
+    public static string itch_username = "monkeywearingafezwithamop";//replace with your username
+    public static string itch_project = "bulter-tests";//replace with your project name...
 
 
     [MenuItem("Building/Build & upload (itch.io)")]
     public static void BuildAndUpload_itchIO()
     {
 
-        //print uploading!
+        UnityEngine.Debug.Log("BuildAndUpload_itchIO called!");
 
+        BuildOutput _BuildAll_output = BuildAll();
 
-        Dictionary<string, string> _output_files = BuildAll();
-
-        //e.g. win64:path to file....
-
-
-
-
-        foreach (KeyValuePair<string, string> _KVP in _output_files)
+        foreach (KeyValuePair<string, string> _KVP in _BuildAll_output.standalone_locations)
         {
             //ok so we need to generate the commands for butler to run...
             UnityEngine.Debug.Log("handling " + _KVP.Key + " at: " + _KVP.Value);
 
 
+
+
             string _build_directory = _KVP.Value;
+            string _standalone_push_command = string.Format("push {0} {1}/{2}:{3}", _build_directory, itch_username, itch_project, _KVP.Key);
 
-            string _command = string.Format("push {0} {1}/{2}:{3}", _build_directory, itch_username, itch_project, _KVP.Key);
-
-
-
-
-            RunTerminalCommands(_command);
-
-
+            RunTerminalCommands_butler(_standalone_push_command);
+            
+            
         }
 
+        
+        string _webgl_push_command = string.Format("push {0} {1}/{2}:HTML5", _BuildAll_output.webgl_path, itch_username, itch_project);
+
+        RunTerminalCommands_butler(_webgl_push_command);
+        
 
 
-        //print uploading done????
+
+        UnityEngine.Debug.Log("BuildAndUpload_itchIO done!... check itch io (may take a minute to update page)");
 
 
 
@@ -58,10 +57,10 @@ public partial class BuildAllVersions
    
 
 
-    static void RunTerminalCommands(string commands)
+    static void RunTerminalCommands_butler(string commands)
     {
 
-        UnityEngine.Debug.Log("running the command: '" + commands+"'");
+        UnityEngine.Debug.Log("running the terminal command: '" + commands+"'");
 
         ProcessStartInfo processInfo = new ProcessStartInfo(project_path + "/Assets/UnityBuild-Upload/Butler");
 
