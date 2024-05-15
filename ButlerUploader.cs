@@ -35,7 +35,7 @@ public partial class BuildAllVersions
 
             string _build_directory = _KVP.Value;
 
-            string _command = string.Format("butler push {0} {1}/{2}:{3}", _build_directory, itch_username, itch_project, _KVP.Key);
+            string _command = string.Format("push {0} {1}/{2}:{3}", _build_directory, itch_username, itch_project, _KVP.Key);
 
 
 
@@ -55,8 +55,7 @@ public partial class BuildAllVersions
     }
 
 
-
-
+   
 
 
     static void RunTerminalCommands(string commands)
@@ -64,15 +63,21 @@ public partial class BuildAllVersions
 
         UnityEngine.Debug.Log("running the command: '" + commands+"'");
 
-        ProcessStartInfo processInfo = new ProcessStartInfo("bash", "-c \"" + commands + "\"");
+        ProcessStartInfo processInfo = new ProcessStartInfo(project_path + "/Assets/UnityBuild-Upload/Butler");
+
+        processInfo.Arguments = commands;
+
+
+
         processInfo.RedirectStandardOutput = true;
         processInfo.RedirectStandardError = true;
         processInfo.UseShellExecute = false;
         processInfo.CreateNoWindow = true;
+        
 
         Process process = new Process();
         process.StartInfo = processInfo;
-        process.Start();
+        process.Start(); 
 
         string output = process.StandardOutput.ReadToEnd();
         string error = process.StandardError.ReadToEnd();

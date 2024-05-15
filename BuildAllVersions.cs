@@ -10,6 +10,18 @@ using System.IO.Compression;
 public partial class BuildAllVersions
 {
 
+    public static string project_path
+    {
+        get
+        {
+            // Get the path to the Assets folder
+            string assetsPath = Application.dataPath;
+
+            // Get the path to the project root folder
+            string projectPath = System.IO.Path.GetDirectoryName(assetsPath);
+            return projectPath;
+        }
+    }
 
 
     /// <summary>
@@ -49,11 +61,7 @@ public partial class BuildAllVersions
         Dictionary<string,string> _return_value = new Dictionary<string, string>();
 
 
-        // Get the path to the Assets folder
-        string assetsPath = Application.dataPath;
 
-        // Get the path to the project root folder
-        string projectPath = System.IO.Path.GetDirectoryName(assetsPath);
 
 
 
@@ -65,7 +73,7 @@ public partial class BuildAllVersions
         {
             string outputPath = "Builds/" + _product_name  + "_"+ build.buildName+"/";
             string _zip_file_path = "Builds/" + _product_name + "-" + build.buildName + ".zip";
-            _return_value.Add(build.buildName,Path.Combine(projectPath,_zip_file_path));
+            _return_value.Add(build.buildName,Path.Combine(project_path,_zip_file_path));
 
             try
             {
