@@ -43,23 +43,23 @@ public partial class BuildAllVersions
 
 
 
-        //try { allBuilds.Add(new BuildSettings("Android", BuildTarget.Android, BuildOptions.None)); }
-        //catch { }
+        try { allBuilds.Add(new BuildSettings("Android", BuildTarget.Android, BuildOptions.None)); }
+        catch { }
 
-        //try { allBuilds.Add(new BuildSettings("iOS", BuildTarget.iOS, BuildOptions.None)); }
-        //catch { }
+        try { allBuilds.Add(new BuildSettings("iOS", BuildTarget.iOS, BuildOptions.None)); }
+        catch { }
 
-        //try { allBuilds.Add(new BuildSettings("macOS", BuildTarget.StandaloneOSX, BuildOptions.None)); }
-        //catch { }
+        try { allBuilds.Add(new BuildSettings("macOS", BuildTarget.StandaloneOSX, BuildOptions.None)); }
+        catch { }
 
-        //try { allBuilds.Add(new BuildSettings("win32", BuildTarget.StandaloneWindows, BuildOptions.None)); }
-        //catch { }
+        try { allBuilds.Add(new BuildSettings("win32", BuildTarget.StandaloneWindows, BuildOptions.None)); }
+        catch { }
 
-        //try { allBuilds.Add(new BuildSettings("win64", BuildTarget.StandaloneWindows64, BuildOptions.None)); }
-        //catch { }
+        try { allBuilds.Add(new BuildSettings("win64", BuildTarget.StandaloneWindows64, BuildOptions.None)); }
+        catch { }
 
-        //try { allBuilds.Add(new BuildSettings("linux", BuildTarget.StandaloneLinux64, BuildOptions.None)); }
-        //catch { }
+        try { allBuilds.Add(new BuildSettings("linux", BuildTarget.StandaloneLinux64, BuildOptions.None)); }
+        catch { }
 
         
 

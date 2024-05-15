@@ -24,11 +24,7 @@ public partial class BuildAllVersions
 
         foreach (KeyValuePair<string, string> _KVP in _BuildAll_output.standalone_locations)
         {
-            //ok so we need to generate the commands for butler to run...
-            UnityEngine.Debug.Log("handling " + _KVP.Key + " at: " + _KVP.Value);
-
-
-
+            //UnityEngine.Debug.Log("handling " + _KVP.Key + " at: " + _KVP.Value);
 
             string _build_directory = _KVP.Value;
             string _standalone_push_command = string.Format("push {0} {1}/{2}:{3}", _build_directory, itch_username, itch_project, _KVP.Key);
@@ -60,7 +56,7 @@ public partial class BuildAllVersions
     static void RunTerminalCommands_butler(string commands)
     {
 
-        UnityEngine.Debug.Log("running the terminal command: '" + commands+"'");
+        //UnityEngine.Debug.Log("running the terminal command: '" + commands+"'");
 
         ProcessStartInfo processInfo = new ProcessStartInfo(project_path + "/Assets/UnityBuild-Upload/Butler");
 
@@ -83,9 +79,9 @@ public partial class BuildAllVersions
         process.WaitForExit();
 
 
-        UnityEngine.Debug.Log("command line output: " + output);
-        if(error != "")
-            UnityEngine.Debug.LogError("command line error: " + error);
+        //UnityEngine.Debug.Log("command line output: " + output);
+        //if(error != "")
+            //UnityEngine.Debug.LogError("command line error: " + error);
 
     }
 
