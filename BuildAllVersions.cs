@@ -5,39 +5,39 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
-using System.Diagnostics;
 
-public class BuildAllVersions
+//code to build all availible versions....
+public partial class BuildAllVersions
 {
 
-    public static string itch_username = "monkeywearingafezwithamop";
-    public static string itch_project = "bulter-tests";
+
 
     /// <summary>
-    /// build all versions of the game...
+    /// build all versions of the game and returns a dictionary {"channel":absolute path}
     /// </summary>
     [MenuItem("Building/Build All Versions")]
-    
+
+   
     public static Dictionary<string,string> BuildAll()
     {
         // Define your build settings for each version here
         List<BuildSettings> allBuilds = new List<BuildSettings>();
 
 
-        try { allBuilds.Add(new BuildSettings("Android", BuildTarget.Android, BuildOptions.None)); }
-        catch { }
+        //try { allBuilds.Add(new BuildSettings("Android", BuildTarget.Android, BuildOptions.None)); }
+        //catch { }
 
-        try { allBuilds.Add(new BuildSettings("iOS", BuildTarget.iOS, BuildOptions.None)); }
-        catch { }
+        //try { allBuilds.Add(new BuildSettings("iOS", BuildTarget.iOS, BuildOptions.None)); }
+        //catch { }
 
         try { allBuilds.Add(new BuildSettings("MacOS", BuildTarget.StandaloneOSX, BuildOptions.None)); }
         catch { }
 
-        try { allBuilds.Add(new BuildSettings("Windows32", BuildTarget.StandaloneWindows, BuildOptions.None)); }
+        try { allBuilds.Add(new BuildSettings("win32", BuildTarget.StandaloneWindows, BuildOptions.None)); }
         catch { }
 
-        try { allBuilds.Add(new BuildSettings("Windows64", BuildTarget.StandaloneWindows64, BuildOptions.None)); }
-        catch { }
+        //try { allBuilds.Add(new BuildSettings("win64", BuildTarget.StandaloneWindows64, BuildOptions.None)); }
+        //catch { }
 
         try { allBuilds.Add(new BuildSettings("Linux", BuildTarget.StandaloneLinux64, BuildOptions.None)); }
         catch { }
@@ -49,7 +49,13 @@ public class BuildAllVersions
         Dictionary<string,string> _return_value = new Dictionary<string, string>();
 
 
-       
+        // Get the path to the Assets folder
+        string assetsPath = Application.dataPath;
+
+        // Get the path to the project root folder
+        string projectPath = System.IO.Path.GetDirectoryName(assetsPath);
+
+
 
 
 
@@ -59,7 +65,7 @@ public class BuildAllVersions
         {
             string outputPath = "Builds/" + _product_name  + "_"+ build.buildName+"/";
             string _zip_file_path = "Builds/" + _product_name + "-" + build.buildName + ".zip";
-            _return_value.Add(build.buildName,_zip_file_path);
+            _return_value.Add(build.buildName,Path.Combine(projectPath,_zip_file_path));
 
             try
             {
@@ -98,52 +104,12 @@ public class BuildAllVersions
     
 
 
-    static void RunMultipleCommands(string commands)
-    {
-        ProcessStartInfo processInfo = new ProcessStartInfo("bash", "-c \"" + commands + "\"");
-        processInfo.RedirectStandardOutput = true;
-        processInfo.UseShellExecute = false;
-        processInfo.CreateNoWindow = true;
-
-        Process process = new Process();
-        process.StartInfo = processInfo;
-        process.Start();
-
-        string output = process.StandardOutput.ReadToEnd();
-        //string error = process.StandardError.ReadToEnd();
-        process.WaitForExit();
-
-    }
 
 
 
 
-    [MenuItem("Building/Build & upload (itch.io)")]
-    public static void BuildAndUpload_itchIO()
-    {
-
-        RunMultipleCommands("butler login");//&& for more commands...
-        
-
-        Dictionary<string,string> _output_files = BuildAll();
 
 
-
-        foreach (KeyValuePair<string,string> _KVP in _output_files)
-        {
-            //compress...
-            //upload to itch io...
-            UnityEngine.Debug.Log("handling " + _KVP.Key + " at: "+_KVP.Value);
-        }
-
-
-
-        
-
-
-
-
-    }
 
     private class BuildSettings
     {
