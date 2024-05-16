@@ -58,7 +58,7 @@ public partial class BuildAllVersions
 
         //UnityEngine.Debug.Log("running the terminal command: '" + commands+"'");
 
-        ProcessStartInfo processInfo = new ProcessStartInfo(project_path + "/Assets/UnityBuild-Upload/Butler");
+        ProcessStartInfo processInfo = new ProcessStartInfo(project_path + "/Assets/UnityBuild-Upload/itch/Butler");
 
         processInfo.Arguments = commands;
 
