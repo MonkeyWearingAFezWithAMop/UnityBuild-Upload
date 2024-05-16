@@ -61,7 +61,7 @@ public partial class BuildAllVersions
         try { allBuilds.Add(new BuildSettings("linux", BuildTarget.StandaloneLinux64, BuildOptions.None)); }
         catch { }
 
-        
+
 
 
         Dictionary<string,string> _standalone_dict = new Dictionary<string, string>();
@@ -81,6 +81,9 @@ public partial class BuildAllVersions
                 string _build_folder = _pipeline_output_path + product_name + "_" + build.buildName;
 
                 BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, _build_folder, build.buildTarget, build.buildOptions);
+
+                if (File.Exists(_zip_file_path))
+                    File.Delete(_zip_file_path);
                 ZipFile.CreateFromDirectory(_pipeline_output_path, _zip_file_path);
 
             }
