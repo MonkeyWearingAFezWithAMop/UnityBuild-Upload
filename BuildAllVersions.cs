@@ -25,13 +25,30 @@ public partial class BuildAllVersions
         }
     }
 
+    [MenuItem("Building/Build Server (Linux)")]
+    public static void BuildLinuxServer()
+    {
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+        buildPlayerOptions.locationPathName = "Builds/Linux/Server/Server.x86_64";
+        buildPlayerOptions.target = BuildTarget.StandaloneLinux64;
+
+        // Set the compression option for the build
+        buildPlayerOptions.options = BuildOptions.CompressWithLz4HC;
+
+        // Set the standalone build subtarget to Server
+        buildPlayerOptions.subtarget = (int)StandaloneBuildSubtarget.Server;
+
+        
+        BuildPipeline.BuildPlayer(buildPlayerOptions);
+        UnityEngine.Debug.Log("Built Server (Linux).");
+    }
+
 
     /// <summary>
     /// build all versions of the game and returns a dictionary {"channel":absolute path}
     /// </summary>
     [MenuItem("Building/Build All Versions")]
 
-   
     public static BuildOutput BuildAll()
     {
         // Define your build settings for each version here

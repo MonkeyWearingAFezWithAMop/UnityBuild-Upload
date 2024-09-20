@@ -11,7 +11,7 @@ public partial class BuildAllVersions
     //https://monkeywearingafezwithamop.itch.io/bulter-tests
 
     public static string itch_username = "monkeywearingafezwithamop";//replace with your username
-    public static string itch_project = "bulter-tests";//replace with your project name...
+    public static string itch_project = "project2-turnbasedfighting";//replace with your project name...
 
 
     [MenuItem("Building/Build & upload (itch.io)")]
