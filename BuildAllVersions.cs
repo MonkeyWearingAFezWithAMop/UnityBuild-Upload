@@ -4,6 +4,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 
 //code to build all availible versions....
@@ -25,11 +26,41 @@ public partial class BuildAllVersions
         }
     }
 
+    [MenuItem("Building/Build Server (Mac)")]
+    public static void BuildMacServer()
+    {
+        // Set output path for the build
+        string outputPath = "Builds/Server-Mac"; // Path to save the build
+
+        // Define build options
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+
+        buildPlayerOptions.locationPathName = outputPath;
+
+        buildPlayerOptions.target = BuildTarget.StandaloneOSX;
+        buildPlayerOptions.subtarget = (int)StandaloneBuildSubtarget.Server; // Fix here: No need to cast to int
+        buildPlayerOptions.options = BuildOptions.CompressWithLz4HC;
+        buildPlayerOptions.scenes = EditorBuildSettings.scenes.Select(x => x.path).ToArray();
+
+        // Perform the build and get the report
+        UnityEditor.Build.Reporting.BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+        // Check if build was successful
+        if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
+        {
+            Debug.Log("Mac Server Build Completed Successfully!");
+        }
+        else
+        {
+            Debug.LogError("Mac Server Build Failed!");
+        }
+    }
+
     [MenuItem("Building/Build Server (Linux)")]
     public static void BuildLinuxServer()
     {
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-        buildPlayerOptions.locationPathName = "Builds/Linux/Server/Server.x86_64";
+        buildPlayerOptions.locationPathName = "Builds/Server-Linux/Server.x86_64";
         buildPlayerOptions.target = BuildTarget.StandaloneLinux64;
 
         // Set the compression option for the build
@@ -38,9 +69,33 @@ public partial class BuildAllVersions
         // Set the standalone build subtarget to Server
         buildPlayerOptions.subtarget = (int)StandaloneBuildSubtarget.Server;
 
-        
+        buildPlayerOptions.scenes = EditorBuildSettings.scenes.Select(x => x.path).ToArray();
+
         BuildPipeline.BuildPlayer(buildPlayerOptions);
         UnityEngine.Debug.Log("Built Server (Linux).");
+    }
+
+
+    [MenuItem("Building/Build Standalone (Mac)")]
+    public static void BuildMacStandalone()
+    {
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+
+        // Set the output path and file name for the macOS standalone build
+        buildPlayerOptions.locationPathName = "Builds/" + product_name +".app";
+
+        // Set the target platform to macOS
+        buildPlayerOptions.target = BuildTarget.StandaloneOSX;
+
+        // Set the compression option for the build (optional)
+        buildPlayerOptions.options = BuildOptions.CompressWithLz4HC;
+
+        // Get all scenes included in the build from EditorBuildSettings
+        buildPlayerOptions.scenes = EditorBuildSettings.scenes.Select(x => x.path).ToArray();
+
+        // Build the project
+        BuildPipeline.BuildPlayer(buildPlayerOptions);
+        UnityEngine.Debug.Log("Built Standalone (Mac).");
     }
 
 
