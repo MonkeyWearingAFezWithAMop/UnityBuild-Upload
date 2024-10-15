@@ -9,6 +9,7 @@ note this has only been tested with macos... i am assuming it will work with win
 TODO 
 1) general tidy up (and bug fixes?)
 2) create a "editor window" to enter required info (uername?,password?,project url/id) but not needed as you could just change the code directly? a bit annoying but 🤷‍♀️
+3) 
 3)reset the build target back to default build target (after hitting the build all button)
 4) upload to amazon lightsail (linux) server????
 currently it only works on mac? but I assume there is a way to work out what version of unity editor you are running and then change which version of butler you use (windows or mac)
