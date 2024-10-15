@@ -9,7 +9,9 @@ TODO
 2) create a "editor window" to enter required info (uername?,password?,project url/id)
 3) reset the build target back to default build target (after hitting the build all button) 
 4) upload to amazon lightsail (linux) server????
-
+5) extend this to work with godot game engine???
+   
 currently it only works on mac? but I assume there is a way to work out what version of unity editor you are running and then change which version of butler you use (windows or mac)
 
 must work on windows and mac (and just put the latest version of butler/ equivalent for steam into the github repo directly?)
+
